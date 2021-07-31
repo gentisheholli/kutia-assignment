@@ -1,46 +1,58 @@
-namespace App\Repository;
+<?php
+namespace App\Repositories;
 use App\Models\PageBuilder;
-
 
 class PageBuilderRepository 
 {   
-    protected $pageBuilder = null;
+    protected $pageBuilder;
+
+    public function __construct(PageBuilder $pageBuilder)
+    {
+        $this->pageBuilder = $pageBuilder;
+    }
+
 
     public function getAllPages()
     {
-        return PageBuilder::all();
+        return $this->pageBuilder->get();
     }
 
     public function getPageBuilderById($id)
     {
-        return PageBuilder::find($id);
+        return $this->pageBuilder->where('id', $id)->get();
     }
 
     public function getPageBuilderByStatus($status)
     {
-        $pages = DB::table('pages')->where($status,$pages->status)->get();
-        return $pages;
+        return $this->pageBuilder->where('status', $status)->get();
     }
 
-
-    public function createOrUpdate( $id = null, $collection = [] )
-    {   
-        if(is_null($id)) {
-            $pageBuilder = new PageBuilder;
-            $pageBuilder->title = $collection['title'];
-            $pageBuilder->content = $collection['content'];
-            $pageBuilder->status =  $collection['status'];
-            return $pageBuilder->save();
-        }
-        $pageBuilder = PageBuilder::find($id);
+    public function create($collection)
+    {
+        $pageBuilder = new $this->pageBuilder;
         $pageBuilder->title = $collection['title'];
         $pageBuilder->content = $collection['content'];
         $pageBuilder->status =  $collection['status'];
-        return $user->save();
+    
+        return $pageBuilder->save();
     }
+
+    public function update($collection, $id)
+    {
+        $pageBuilder = $this->pageBuilder->find($id);
+        
+        $pageBuilder->title = $collection['title'];
+        $pageBuilder->content = $collection['content'];
+        $pageBuilder->status =  $collection['status'];
+        
+ 
+        return $pageBuilder->update($collection);
+
+    }
+
     
     public function deletePage($id)
     {
-        return PageBuilder::find($id)->delete();
+       return $this->getPageBuilderById($id)->delete();
     }
 }

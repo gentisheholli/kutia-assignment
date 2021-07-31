@@ -8,7 +8,7 @@ use Session;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class CustomAuthController extends Controller
 {
 
     public function index()
@@ -46,7 +46,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ]);
            
         $data = $request->all();
@@ -63,6 +63,7 @@ class AuthController extends Controller
         'email' => $data['email'],
         'password' => Hash::make($data['password'])
       ]);
+
     }    
     
 

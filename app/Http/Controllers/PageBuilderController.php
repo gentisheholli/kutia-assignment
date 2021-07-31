@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\PageBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Requests\PageBuilderRequest;
+use App\Services\PageBuilderService;
 
 class PageBuilderController extends Controller
 {
+    protected $pageBuilderService;
+
+    public function __construct(PageBuilderService $pageBuilderService)
+	{
+		$this->pageBuilderService = $pageBuilderService;
+	}
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,13 @@ class PageBuilderController extends Controller
      */
     public function index()
     {
-        //
+        $pages = $this->pageBuilderService->index();
+     
+        if(count($pages)< 1){
+            return ("No page found.");
+        }
+        return $pages;
+        //return view('pageBuilder.index', compact('pages'));
     }
 
     /**
@@ -22,9 +37,9 @@ class PageBuilderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($request)
     {
-        //
+        return view('pageBuilder.create');
     }
 
     /**
@@ -35,8 +50,13 @@ class PageBuilderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->pageBuilderService->create($request);
+
+        return true;
+
+       // return redirect()->route('pageBuilder.index')->with('message', 'Page created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -44,9 +64,15 @@ class PageBuilderController extends Controller
      * @param  \App\Models\PageBuilder  $pageBuilder
      * @return \Illuminate\Http\Response
      */
-    public function show(PageBuilder $pageBuilder)
-    {
-        //
+    public function show($id)
+    {  
+        $pageBuilder = $this->pageBuilderService->read($id);
+
+        if($pageBuilder->isEmpty){
+            return ("Page not found.");
+        }
+        return $pageBuilder;
+        // return view('pageBuilder.show', compact('pageBuilder'));
     }
 
     /**
@@ -57,7 +83,9 @@ class PageBuilderController extends Controller
      */
     public function edit(PageBuilder $pageBuilder)
     {
-        //
+        $pageBuilder = $this->pageBuilderService->read($id);
+
+        return view('pageBuilder.edit', compact('pageBuilder'));
     }
 
     /**
@@ -67,9 +95,12 @@ class PageBuilderController extends Controller
      * @param  \App\Models\PageBuilder  $pageBuilder
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PageBuilder $pageBuilder)
+    public function update(Request $request, $id)
     {
-        //
+        $pageBuilder = $this->pageBuilderService->update($request, $id);
+        return $pageBuilder;
+
+        //return redirect()->back()->with('status', 'Page has been updated succesfully');
     }
 
     /**
@@ -78,8 +109,15 @@ class PageBuilderController extends Controller
      * @param  \App\Models\PageBuilder  $pageBuilder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PageBuilder $pageBuilder)
+    public function destroy($id)
     {
-        //
+        $pageBuilder = $this->pageBuilderService->read($id);
+
+        if(is_null($pageBuilder)) {
+            return response()->json(["message" => "Page was not found."]);   
+        }
+        
+        $pageBuilder->delete();
+		//return redirect()->route('fileManagement.index')->with('message', 'Page deleted successfully.');
     }
 }

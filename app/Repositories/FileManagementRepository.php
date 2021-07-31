@@ -1,3 +1,4 @@
+<?php
 namespace App\Repository;
 
 use App\Models\FileManagement;
@@ -5,22 +6,35 @@ use Illuminate\Support\Facades\Hash;
 
 class FileManagementRepository 
 {   
-    protected $fileManagement = null;
+    protected $fileManagement;
+
+    public function __construct(FileManagement $fileManagement)
+    {
+        $this->fileManagement = $fileManagement;
+    }
+
 
     public function getAllFiles()
     {
-        return FileManagement::all();
+        return $this->fileManagement->get();
     }
 
     public function getFileById($id)
     {
-        return FileManagement::find($id);
+        return $this->fileManagement->where('id', $id)->get();
+    }
+
+    public function getUserFiles($userId){
+  
+      $currentuser = Auth::user();
+      return $this->fileManagement::where('user_id', '=', $currentuser->id)->get();
+
     }
 
     public function createOrUpdate( $id = null, $collection = [] )
     {   
         if(is_null($id)) {
-            $fileManagement = new FileManagement;
+            $fileManagement = new $this->fileManagement;
             $image = $fileManagement->file_name;
             $imageFile = time() . rand(123456, 999999) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('/uploads'), $imageFile);
@@ -28,7 +42,7 @@ class FileManagementRepository
 
             return $fileManagement->save();
         }
-        $fileManagement = FileManagement::find($id);
+        $fileManagement = $this->fileManagement::find($id);
         $fileManagement->file_name = $collection['file_name'];
         $fileManagement->user_id = $collection['user_id'];
         return $fileManagement->save();
@@ -36,10 +50,10 @@ class FileManagementRepository
     
     public function deleteFile($id)
     {
-        $fileManagement = FileManagement::find($id);
+        $fileManagement = $this->fileManagement::find($id);
 
         if (is_null($fileManagement)) {
-            return response()->json(["message" => "Staff member was not found.."]);
+            return response()->json(["message" => "File was not found"]);
         }
 
         if($fileManagement->file_name){

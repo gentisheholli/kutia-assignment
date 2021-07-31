@@ -1,3 +1,4 @@
+<?php
 namespace App\Repository;
 
 use App\Models\User;
@@ -5,28 +6,35 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository 
 {   
-    protected $user = null;
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
 
     public function getAllUsers()
     {
-        return User::all();
+        return $this->user->get();
     }
 
     public function getUserById($id)
     {
-        return User::find($id);
+        return $this->user->where('id', $id)->get();
     }
 
     public function createOrUpdate( $id = null, $collection = [] )
     {   
         if(is_null($id)) {
-            $user = new User;
+            $user = new $this->user;
             $user->name = $collection['name'];
             $user->email = $collection['email'];
             $user->password = Hash::make('password');
+
             return $user->save();
         }
-        $user = User::find($id);
+        $user = $this->user->find($id);
         $user->name = $collection['name'];
         $user->email = $collection['email'];
         return $user->save();
@@ -34,6 +42,6 @@ class UserRepository
     
     public function deleteUser($id)
     {
-        return User::find($id)->delete();
+        return $this->getUserById($id)->softDeletes();
     }
 }
