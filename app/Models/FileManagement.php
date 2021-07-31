@@ -23,4 +23,10 @@ class FileManagement extends Model
      *
      * @var array
      */
+
+    public function user()
+    {
+      return $this->belongsTo('App\Models\User','users');
+    }
+
 }
