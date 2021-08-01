@@ -1,26 +1,13 @@
 <?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RoleUser extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id','role_id'];
 
-    protected $fillable = ['title','content','status'];
+    public function user()
+    {
+        return $this->belongsToMany('App\User');
+    }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-}
+ }

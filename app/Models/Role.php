@@ -7,9 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    use HasFactory;
-
+    const ROLE_ADMINISTRATOR = 'ROLE_ADMINISTRATOR';
+    const ROLE_PROFESSOR = 'ROLE_POST_MAINTAINER';
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = ['name'];
+
+    public static function getRoleList()
+    {
+        return [
+            static::ROLE_ADMINISTRATOR =>'Admin',
+            static::ROLE_POST_MAINTAINER => 'Post-Maintainer',
+        ];
+    }
 
     /**
      * The attributes that should be hidden for arrays.
@@ -18,9 +32,4 @@ class Role extends Model
      */
     protected $hidden = [];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
 }

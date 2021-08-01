@@ -42,6 +42,6 @@ class UserRepository
     
     public function deleteUser($id)
     {
-        return $this->getUserById($id)->softDeletes();
+        return $this->getUserById($id)->delete();
     }
 }

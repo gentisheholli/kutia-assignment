@@ -27,7 +27,7 @@ class UserController extends Controller
         if($users->isEmpty){
             return ("No user found.");
         }
-        return view('users.index', compact('users'));
+        return view('user.index', compact('users'));
 
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
      */
     public function create($request)
     {
-        return view('users.create');
+        return view('user.create');
     }
 
     /**
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $this->userService->create($request);
 
-        return redirect()->route('users.index')->with('message', 'User created successfully.');
+        return redirect()->route('user.index')->with('message', 'User created successfully.');
     }
 
     /**
@@ -67,7 +67,7 @@ class UserController extends Controller
         if($user->isEmpty){
         return ("User not found.");
         }
-         return view('users.show', compact('user'));
+         return view('user.show', compact('user'));
     }
 
     /**
@@ -94,7 +94,7 @@ class UserController extends Controller
     {
         $user = $this->userService->update($request, $id);
 
-        return redirect()->route('users.index')->with('message', 'User has been updated succesfully');
+        return redirect()->route('user.index')->with('message', 'User has been updated succesfully');
     }
 
     /**
@@ -112,6 +112,6 @@ class UserController extends Controller
             return response()->json(["message" => "User was not found."]);   
         }
         $user->delete();
-		return redirect()->route('users.index')->with('message', 'User deleted successfully.');
+		return redirect()->route('user.index')->with('message', 'User deleted successfully.');
     }
 }
