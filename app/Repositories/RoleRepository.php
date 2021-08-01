@@ -3,7 +3,6 @@ namespace App\Repository;
 use App\Models\Role;
 use App\Models\Permission;
 
-
 class RoleRepository 
 {   
     protected $role;

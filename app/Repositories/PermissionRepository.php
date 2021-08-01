@@ -1,10 +1,5 @@
 <?php
-
-namespace App\Http\Controllers;
-
-use Auth;
-use Session;
-use Illuminate\Http\Request;
+namespace App\Repository;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -24,84 +19,37 @@ class PermissionRepository
      */
 	public function getAllPermissions()
 	{
-        $permission = $this->permission->find($id);
-
-		if (is_null($permission)) {
-			return $this->sendError('No Permission found.');
-		}
-
-		return $this->sendResponse($permission->toArray(), 'Permission list retrieved successfully.');
+        return $this->permission->get();
 	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-	public function create()
-	{
-        //
-	}
-
+	public function getPermissionById($id)
+    {
+        return $this->permission->where('id', $id)->get();
+    }
     /**
      * Store a newly created permission in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-	public function store(Request $request)
-	{
-		try{       
-			$permission = new Permission();
+	public function create($collection)
+	{     
+			$permission = new $this->permission;
         
-			$name = $request['name'];
+			$name = $collection['name'];
 			$permission->name = $name;
-			$roles = $request['roles'];
+			$roles = $collection['roles'];
 			$permission->save();
 
-			if (!empty($request['roles'])) { //If one or more role
+			if (!empty($collection['roles'])) { //If one or more role
 				foreach ($roles as $role) {
 					$r = Role::where('id', '=', $role)->firstOrFail();
 					$permission = Permission::where('name', '=', $name)->first();
 					$r->givePermissionTo($permission);
 				}
 			}
-			return 'Permission '. $permission->name.' '.' added!';
-		}
-		catch(Exception $e){
-			$data = array('msg' => 'Error occured. Permission failed to get created', 'error' => true);
-			echo json_encode($data);
-		}
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-	public function show($id)
-	{
-		try {
-			$permission = Permission::findOrFail($id);
-			return $permission;
-		}
-		catch (Exception $e) {
-			$data = array('msg' => 'Error occured. Permission could not be provided', 'error' => true);
-			echo json_encode($data);
-		}
 	}
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-	public function edit($id)
-	{
-        //
-	}
+    
 
     /**
      * Update the specified permission in storage.
@@ -110,10 +58,10 @@ class PermissionRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-	public function update(Request $request, $id)
+	public function update($collection, $id)
 	{
 		try{
-			$permissionUpdate = Permission::findOrFail($id);
+			$permissionUpdate = $this->permission::findOrFail($id);
 			$input = $request->all();
 			$permissionUpdate->fill($input)->save();
 
@@ -133,21 +81,9 @@ class PermissionRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-	public function destroy($id)
+	public function deletePermission($id)
 	{
-		try{
-			$permission = Permission::findOrFail($id);
-			$permission->delete();
-
-			if ($permission->name == "Administer roles & permissions") {
-				return redirect()->route('permissions.index')
-				->with('flash_message',
-				'Cannot delete this Permission!');
-			}
-		}
-		catch(Exception $e){
-			$data = array('msg' => 'Error occured. Permission failed to get deleted', 'error' => true);
-			echo json_encode($data);
-		}
+		$permission = $this->permission::findOrFail($id);
+		$permission->delete();
 	}   
 }
