@@ -130,4 +130,3 @@ class RoleController extends Controller
             ->delete($id);
     }
 }
-

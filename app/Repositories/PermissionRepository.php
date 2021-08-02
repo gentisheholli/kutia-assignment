@@ -3,7 +3,7 @@ namespace App\Repositories;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class PermissionRepository 
+class PermissionRepository
 {
     protected $permission;
 
@@ -17,37 +17,43 @@ class PermissionRepository
      *
      * @return \Illuminate\Http\Response
      */
-	public function getAllPermissions()
-	{
-        return $this->permission->get();
-	}
-
-	public function getPermissionById($id)
+    public function getAllPermissions()
     {
-        return $this->permission->where('id', $id)->get();
+        return $this
+            ->permission
+            ->get();
     }
 
-	public function createOrUpdate($id = null ,$collection)
-	{     
-		if(is_null($id)) {
+    public function getPermissionById($id)
+    {
+        return $this
+            ->permission
+            ->where('id', $id)->get();
+    }
 
-			$permission = new $this->permission;
-        
-			$name = $collection['name'];
-			$permission->name = $name;
-			$roles = $collection['roles'];
-			return $permission->save();
-		}
+    public function createOrUpdate($id = null, $collection)
+    {
+        if (is_null($id))
+        {
 
-			if (!empty($collection['roles'])) { //If one or more role
-				foreach ($roles as $role) {
-					$r = Role::where('id', '=', $role)->firstOrFail();
-					$permission = Permission::where('name', '=', $name)->first();
-					$r->givePermissionTo($permission);
-				}
-			}
-	}
-    
+            $permission = new $this->permission;
+
+            $name = $collection['name'];
+            $permission->name = $name;
+            $roles = $collection['roles'];
+            return $permission->save();
+        }
+
+        if (!empty($collection['roles']))
+        { //If one or more role
+            foreach ($roles as $role)
+            {
+                $r = Role::where('id', '=', $role)->firstOrFail();
+                $permission = Permission::where('name', '=', $name)->first();
+                $r->givePermissionTo($permission);
+            }
+        }
+    }
 
     /**
      * Remove the specified permission from storage.
@@ -55,9 +61,10 @@ class PermissionRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-	public function deletePermission($id)
-	{
-		$permission = $this->permission::findOrFail($id);
-		$permission->delete();
-	}   
+    public function deletePermission($id)
+    {
+        $permission = $this->permission::findOrFail($id);
+        $permission->delete();
+    }
 }
+

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use App\Models\FileManagement;
@@ -8,30 +7,39 @@ use Illuminate\Http\Request;
 
 class FileManagementService
 {
-	public function __construct(FileManagementRepository $file)
-	{
-		$this->fileManagement = $file ;
-	}
+    public function __construct(FileManagementRepository $file)
+    {
+        $this->fileManagement = $file;
+    }
 
-	public function index()
-	{
-		return $this->fileManagement->getAllFiles();
-	}
+    public function index()
+    {
+        return $this
+            ->fileManagement
+            ->getAllFiles();
+    }
 
     public function create(Request $request)
-	{
-		$attributes = $request->all();
-	
-		return $this->fileManagement->create($attributes);
-	}
+    {
+        $attributes = $request->all();
 
-	public function read($id)
-	{
-     return $this->fileManagement->getFileById($id);
-	}
+        return $this
+            ->fileManagement
+            ->create($attributes);
+    }
 
-	public function delete($id)
-	{
-      return $this->fileManagement->delete($id);
-	}
+    public function read($id)
+    {
+        return $this
+            ->fileManagement
+            ->getFileById($id);
+    }
+
+    public function delete($id)
+    {
+        return $this
+            ->fileManagement
+            ->delete($id);
+    }
 }
+

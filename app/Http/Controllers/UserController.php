@@ -133,4 +133,3 @@ class UserController extends Controller
             ->with('message', 'User deleted successfully.');
     }
 }
-

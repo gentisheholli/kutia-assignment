@@ -18,7 +18,7 @@ class PermissionService
 		return $this->permission->getAllPermissions();
 	}
 
-    public function createOrUpdate(Request $request)
+    public function create(Request $request)
 	{
 		$attributes = $request->all();
 	

@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function files()
     {
-      return $this->hasMany('App\Models\FileManagement','fileManagement');
+      return $this->hasMany('App\Models\FileManagement');
     }
 
 }
