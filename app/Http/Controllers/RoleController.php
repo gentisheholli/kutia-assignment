@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Http\Requests\PageBuilderRequest;
+use App\Http\Requests\RoleRequest;
 use App\Services\RoleService;
 
 class RoleController extends Controller
@@ -12,9 +11,9 @@ class RoleController extends Controller
     protected $roleService;
 
     public function __construct(RoleService $roleService)
-	{
-		$this->roleService = $roleService;
-	}
+    {
+        $this->roleService = $roleService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,13 +22,17 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = $this->roleService->index();
-     
-        if(count($roles)< 1){
+        $roles = $this
+            ->roleService
+            ->index();
+
+        if (count($roles) < 1)
+        {
             return ("No role found.");
         }
-        return $role;
+        return $roles;
         //return view('role.index', compact('pages'));
+        
     }
 
     /**
@@ -48,15 +51,17 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $this->roleService->create($request);
+        $this
+            ->roleService
+            ->create($request);
 
         return true;
 
-       // return redirect()->route('role.index')->with('message', 'Page created successfully.');
+        // return redirect()->route('role.index')->with('message', 'Page created successfully.');
+        
     }
-
 
     /**
      * Display the specified resource.
@@ -65,14 +70,18 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {  
-        $role = $this->roleService->read($id);
+    {
+        $role = $this
+            ->roleService
+            ->read($id);
 
-        if($role->isEmpty){
+        if (!$role)
+        {
             return ("Role not found.");
         }
         return $role;
         // return view('role.show', compact('role'));
+        
     }
 
     /**
@@ -81,9 +90,11 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
-        $role = $this->roleService->read($id);
+        $role = $this
+            ->roleService
+            ->read($id);
 
         return view('role.edit', compact('role'));
     }
@@ -97,10 +108,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = $this->roleService->update($request, $id);
+        $role = $this
+            ->roleService
+            ->update($request, $id);
         return $role;
 
-        //return redirect()->back()->with('status', 'Page has been updated succesfully');
+        //return redirect()->back()->with('status', 'Role has been updated succesfully');
+        
     }
 
     /**
@@ -111,13 +125,9 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = $this->roleService->read($id);
-
-        if(is_null($role)) {
-            return response()->json(["message" => "Role was not found."]);   
-        }
-        
-        $role->delete();
-		//return redirect()->route('fileManagement.index')->with('message', 'Page deleted successfully.');
+        $role = $this
+            ->roleService
+            ->delete($id);
     }
 }
+

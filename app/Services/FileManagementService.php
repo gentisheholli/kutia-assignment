@@ -15,26 +15,19 @@ class FileManagementService
 
 	public function index()
 	{
-		return $this->fileManagement->all();
+		return $this->fileManagement->getAllFiles();
 	}
 
     public function create(Request $request)
 	{
-             $attributes = $request->all();
-         
-             return $this->fileManagement->create($attributes);
+		$attributes = $request->all();
+	
+		return $this->fileManagement->create($attributes);
 	}
 
 	public function read($id)
 	{
-     return $this->fileManagement->find($id);
-	}
-
-	public function update(Request $request, $id)
-	{
-	  $attributes = $request->all();
-	  
-      return $this->fileManagement->update($id, $attributes);
+     return $this->fileManagement->getFileById($id);
 	}
 
 	public function delete($id)

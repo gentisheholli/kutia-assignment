@@ -9,7 +9,7 @@ class PageBuilder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','content','status'];
+    protected $fillable = ['title','content','status'];  
 
     /**
      * The attributes that should be hidden for arrays.

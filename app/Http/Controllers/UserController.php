@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -11,10 +10,10 @@ class UserController extends Controller
 {
     protected $userService;
 
-	public function __construct(UserService $userService)
-	{
-		$this->userService = $userService;
-	}
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +21,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->index();
+        $users = $this
+            ->userService
+            ->index();
 
-        if($users->isEmpty){
+        if ($users->isEmpty)
+        {
             return ("No user found.");
         }
         return view('user.index', compact('users'));
@@ -47,11 +49,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $this->userService->create($request);
+        $this
+            ->userService
+            ->create($request);
 
-        return redirect()->route('user.index')->with('message', 'User created successfully.');
+        return redirect()->route('user.index')
+            ->with('message', 'User created successfully.');
     }
 
     /**
@@ -62,12 +67,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->userService->read($id);
+        $user = $this
+            ->userService
+            ->read($id);
 
-        if($user->isEmpty){
-        return ("User not found.");
+        if ($user->isEmpty)
+        {
+            return ("User not found.");
         }
-         return view('user.show', compact('user'));
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -76,9 +84,11 @@ class UserController extends Controller
      * @param  \App\Models\FileManagement  $fileManagement
      * @return \Illuminate\Http\Response
      */
-    public function edit(FileManagement $fileManagement)
+    public function edit($id)
     {
-        $user = $this->userService->read($id);
+        $user = $this
+            ->userService
+            ->read($id);
 
         return view('users.edit', compact('user'));
     }
@@ -90,11 +100,14 @@ class UserController extends Controller
      * @param  \App\Models\FileManagement  $fileManagement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FileManagement $fileManagement)
+    public function update(Request $request, $id)
     {
-        $user = $this->userService->update($request, $id);
+        $user = $this
+            ->userService
+            ->update($request, $id);
 
-        return redirect()->route('user.index')->with('message', 'User has been updated succesfully');
+        return redirect()->route('user.index')
+            ->with('message', 'User has been updated succesfully');
     }
 
     /**
@@ -106,12 +119,18 @@ class UserController extends Controller
     public function destroy(FileManagement $fileManagement)
     {
 
-        $user = $this->userService->read($id);
+        $user = $this
+            ->userService
+            ->read($id);
 
-        if(is_null($user)) {
-            return response()->json(["message" => "User was not found."]);   
+        if (is_null($user))
+        {
+            return response()->json(["message" => "User was not found."]);
         }
         $user->delete();
-		return redirect()->route('user.index')->with('message', 'User deleted successfully.');
+        return redirect()
+            ->route('user.index')
+            ->with('message', 'User deleted successfully.');
     }
 }
+

@@ -16,8 +16,8 @@ class CreateFileManagementTable extends Migration
         Schema::create('file_management', function (Blueprint $table) {
             $table->id();
             $table->string('file_name');
-            $table->unsignedInteger('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->unsignedInteger('user_id')->unsigned()->index();
+            // $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

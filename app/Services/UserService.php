@@ -15,19 +15,19 @@ class UserService
 
 	public function index()
 	{
-		return $this->user->all();
+		return $this->user->getAllUsers();
 	}
 
     public function create(Request $request)
 	{
-             $attributes = $request->all();
-         
-             return $this->user->create($attributes);
+		$attributes = $request->all();
+	
+		return $this->user->create($attributes);
 	}
 
 	public function read($id)
 	{
-     return $this->user->find($id);
+     return $this->user->getUserById($id);
 	}
 
 	public function update(Request $request, $id)

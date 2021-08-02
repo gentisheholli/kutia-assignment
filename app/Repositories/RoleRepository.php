@@ -1,7 +1,7 @@
 <?php
-namespace App\Repository;
-use App\Models\Role;
-use App\Models\Permission;
+namespace App\Repositories;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleRepository 
 {   
@@ -45,13 +45,8 @@ class RoleRepository
     
     public function deleteRole($id)
     {
-        $role = $this->role->find($id);
-
-        if (is_null($role)) {
-            return response()->json(["message" => "Role was not found."]);
-        }
-
+        $role = $this->role->findOrFail($id);
         $role->delete();
-        return response()->json(["message" => "Role was deleted successfully."]);
+
     }
 }

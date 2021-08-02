@@ -1,18 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\PageBuilder;
+use App\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Http\Requests\PageBuilderRequest;
-use App\Services\PageBuilderService;
+use App\Services\PermissionService;
 
-class PageBuilderController extends Controller
+class PermissionController extends Controller
 {
-    protected $pageBuilderService;
+    protected $permissionService;
 
-    public function __construct(PageBuilderService $pageBuilderService)
+    public function __construct(PermissionService $permissionService)
     {
-        $this->pageBuilderService = $pageBuilderService;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -22,16 +21,17 @@ class PageBuilderController extends Controller
      */
     public function index()
     {
-        $pages = $this
-            ->pageBuilderService
+        $roles = $this
+            ->permissionService
             ->index();
 
-        if (count($pages) < 1)
+        if (count($roles) < 1)
         {
-            return ("No page found.");
+            return ("No permission found.");
         }
-
-        return view('pageBuilder.index', compact('pages'));
+        return $permission;
+        //return view('permission.index', compact('pages'));
+        
     }
 
     /**
@@ -41,7 +41,7 @@ class PageBuilderController extends Controller
      */
     public function create($request)
     {
-        return view('pageBuilder.create');
+        return view('permission.create');
     }
 
     /**
@@ -53,64 +53,64 @@ class PageBuilderController extends Controller
     public function store(Request $request)
     {
         $this
-            ->pageBuilderService
+            ->permissionService
             ->create($request);
 
         return true;
 
-        // return redirect()->route('pageBuilder.index')->with('message', 'Page created successfully.');
+        // return redirect()->route('permission.index')->with('message', 'Page created successfully.');
         
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PageBuilder  $pageBuilder
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $pageBuilder = $this
-            ->pageBuilderService
+        $permission = $this
+            ->permissionService
             ->read($id);
 
-        if (!$pageBuilder)
+        if ($permission->isEmpty)
         {
-            return ("Page not found.");
+            return ("Permission not found.");
         }
-        return $pageBuilder;
-        // return view('pageBuilder.show', compact('pageBuilder'));
+        return $permission;
+        // return view('permission.show', compact('permission'));
         
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PageBuilder  $pageBuilder
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $pageBuilder = $this
-            ->pageBuilderService
+        $permission = $this
+            ->permissionService
             ->read($id);
 
-        return view('pageBuilder.edit', compact('pageBuilder'));
+        return view('permission.edit', compact('permission'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PageBuilder  $pageBuilder
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $pageBuilder = $this
-            ->pageBuilderService
+        $permission = $this
+            ->permissionService
             ->update($request, $id);
-        return $pageBuilder;
+        return $permission;
 
         //return redirect()->back()->with('status', 'Page has been updated succesfully');
         
@@ -119,21 +119,23 @@ class PageBuilderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PageBuilder  $pageBuilder
+     * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $pageBuilder = $this
-            ->pageBuilderService
-            ->delete($id);
+        $permission = $this
+            ->permissionService
+            ->read($id);
 
-        if (is_null($pageBuilder))
+        if (is_null($permission))
         {
-            return response()->json(["message" => "Page was not found."]);
+            return response()->json(["message" => "Permission was not found."]);
         }
 
-        //return redirect()->route('fileManagement.index')->with('message', 'Page deleted successfully.');
+        $permission->delete();
+        //return redirect()->route('permission.index')->with('message', 'Permision deleted successfully.');
         
     }
 }
+

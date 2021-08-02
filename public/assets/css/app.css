@@ -1,13 +1,12 @@
 body {
     display: flex;
-    background-color: red;
   }
   .page-content {
     width: calc(100% - 250px);
   }
   .sidebar {
     background-color: #17a2b8;
-    height: 100vh;
+    height: 100%;
     width: 250px;
     display: flex;
     flex-direction: column;

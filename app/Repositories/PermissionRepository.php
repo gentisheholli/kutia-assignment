@@ -1,5 +1,5 @@
 <?php
-namespace App\Repository;
+namespace App\Repositories;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -26,20 +26,18 @@ class PermissionRepository
     {
         return $this->permission->where('id', $id)->get();
     }
-    /**
-     * Store a newly created permission in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-	public function create($collection)
+
+	public function createOrUpdate($id = null ,$collection)
 	{     
+		if(is_null($id)) {
+
 			$permission = new $this->permission;
         
 			$name = $collection['name'];
 			$permission->name = $name;
 			$roles = $collection['roles'];
-			$permission->save();
+			return $permission->save();
+		}
 
 			if (!empty($collection['roles'])) { //If one or more role
 				foreach ($roles as $role) {
@@ -50,30 +48,6 @@ class PermissionRepository
 			}
 	}
     
-
-    /**
-     * Update the specified permission in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-	public function update($collection, $id)
-	{
-		try{
-			$permissionUpdate = $this->permission::findOrFail($id);
-			$input = $request->all();
-			$permissionUpdate->fill($input)->save();
-
-			return redirect()->route('permissions.index')
-			->with('flash_message',
-			'Permission'. $permission->name.' updated!');
-		}
-		catch(Exception $e){
-			$data = array('msg' => 'Error occured. Permission failed to get updated', 'error' => true);
-			echo json_encode($data);
-		}
-	}
 
     /**
      * Remove the specified permission from storage.

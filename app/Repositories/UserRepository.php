@@ -1,16 +1,21 @@
 <?php
-namespace App\Repository;
+namespace App\Repositories;
 
 use App\Models\User;
+use App\Models\Role;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository 
 {   
-    protected $user;
+    protected $user,$role,$roleUser;
+ 
 
-    public function __construct(User $user)
+    public function __construct(User $user,Role $role, RoleUser $roleUser)
     {
         $this->user = $user;
+        $this->role = $role;
+        $this->roleUser = $roleUser;
     }
 
 
@@ -31,17 +36,40 @@ class UserRepository
             $user->name = $collection['name'];
             $user->email = $collection['email'];
             $user->password = Hash::make('password');
+            $user->save();
 
-            return $user->save();
+            $roleUser = new $this->roleUser;
+            $roleUser->role_id = $collection['role_id'];
+            if($collection['role_id'] == null){
+                $collection['role_id'] = 2;
+            }
+            $roleUser->user_id = $user->id;
+            $roleUser->save();
+
+            return true;
+
         }
         $user = $this->user->find($id);
         $user->name = $collection['name'];
         $user->email = $collection['email'];
-        return $user->save();
+        $user->save();
+
+        $roleUser =  $this->roleUser->find($id);
+        $roleUser->role_id = $collection['role_id'];
+        if($collection['role_id'] == null){
+            $collection['role_id'] = 2;
+        }
+        $roleUser->save();
+
+        return true;
+        
     }
     
     public function deleteUser($id)
     {
-        return $this->getUserById($id)->delete();
+        $user = $this->getUserById($id)->delete();
+        $roleUser = $this->roleUser->where('user_id',$id)->delete();
+
+        return true;
     }
 }

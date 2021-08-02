@@ -1,35 +1,120 @@
-@extends('layout')
+<!DOCTYPE HTML>
+<html lang="en">
 
-@section('header')
-    <div class="page-header">
-        <h1><i class="glyphicon glyphicon-edit"></i> LineUp / Edit #{{$line_up->id}}</h1>
-    </div>
-@endsection
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+    <title>Document</title>
+</head>
 
-@section('content')
-    @include('error')
-
-    <div class="row">
-        <div class="col-md-12">
-
-            <form action="{{ route('line_ups.update' ,['id' => $line_up->id])}}" method="POST">
-                <input type="hidden" name="_method" value="PUT">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                <div class="form-group">
-	<label for="day-field">Day</label>
-    <input class="form-control" type="text" name="day" id="day-field" value="{{ old('day', $line_up->day ) }}" />
-</div> <div class="form-group">
-	<label for="artists-field">Artists</label>
-	<input class="form-control" type="text" name="artists" id="artists-field" value="{{ old('artists', $line_up->artists ) }}" />
-</div>
-
-                <div class="well well-sm">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <a class="btn btn-link pull-right" href="{{ route('line_ups.listLineUps') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
+<body>
+<div class="sidebar">
+        <div class="sidebar-title mb-3">
+            <h4>Kutia Task</h4>
+        </div>
+        <a href="#" class="sidebar-link">Dashboard</a>
+        <div class="dropdown mb-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                File Management
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{route('fileManagement.create')}}">Create</a>  
+                <a class="dropdown-item" href="{{route('fileManagement.allFiles')}}l">Show All</a>
+            </div>
+        </div>
+        <div class="dropdown mb-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+               Page Builder
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{route('pageBuilder.create')}}">Create</a>
+                <a class="dropdown-item" href="{{route('pageBuilder.allPages')}}">Show All</a>
+                <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+        </div>
+        <div class="dropdown mb-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Roles & Permissions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{route('fileManagement.create')}}">Create</a>  
+                <a class="dropdown-item" href="{{route('fileManagement.allFiles')}}l">Show All</a>
+            </div>
+        </div>
+        <div class="dropdown mb-3">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+              Users
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{route('pageBuilder.create')}}">Create</a>
+                <a class="dropdown-item" href="{{route('pageBuilder.allPages')}}">Show All</a>
+                <!-- <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+        </div>
+    <div class="container-fluid page-content">
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="form-title">
+                    <div class="col-8 mx-auto">
+                        <h4>
+                            Create
+                        </h4>
+                    </div>
                 </div>
-            </form>
+            </div>
+            <div class="col-8 mx-auto">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="pass" name="password" minlength="8" required>
+                    </div>
 
+                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-@endsection
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+
+    <!-- wyzid editor  -->
+    <script src="https://cdn.tiny.cloud/1/xfn2g4vol33jic6905y7em7tys59r08si7q42xqecf0eu7f3/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#editor',
+            skin: 'bootstrap',
+            plugins: 'lists, link, image, media',
+            toolbar: 'h1 h2 bold italic strikethrough blockquote bullist numlist backcolor | link image media | removeformat help',
+            menubar: false
+        });
+
+    </script>
+</body>
+
+</html>

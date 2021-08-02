@@ -19,7 +19,7 @@ class PageBuilderRepository
 
     public function getPageBuilderById($id)
     {
-        return $this->pageBuilder->where('id', $id)->get();
+        return $this->pageBuilder->where('id', $id)->first();
     }
 
     public function getPageBuilderByStatus($status)

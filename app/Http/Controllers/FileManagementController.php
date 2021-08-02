@@ -1,20 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\FileManagement;
-use Illuminate\Http\Requests\FileManagementRequest;
 use Illuminate\Http\Request;
+use App\Models\FileManagement;
 use App\Services\FileManagementService;
+use App\Http\Requests\FileManagementRequest;
 
 class FileManagementController extends Controller
 {
     protected $fileManagementService;
 
-	public function __construct(FileManagementService $fileManagementService)
-	{
-		$this->fileManagementService = $fileManagementService;
-	}
+    public function __construct(FileManagementService $fileManagementService)
+    {
+        $this->fileManagementService = $fileManagementService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,12 +21,17 @@ class FileManagementController extends Controller
      */
     public function index()
     {
-        $files = $this->fileManagementService->index();
+        $files = $this
+            ->fileManagementService
+            ->index();
 
-        if($files->isEmpty){
+        if (!$files)
+        {
             return ("No file found.");
         }
-        return view('fileManagement.index', compact('files'));
+        return $files;
+        //return view('fileManagement.index', compact('files'));
+        
     }
 
     /**
@@ -35,7 +39,8 @@ class FileManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($request){
+    public function create(Request $request)
+    {
 
         return view('fileManagement.create');
     }
@@ -48,9 +53,14 @@ class FileManagementController extends Controller
      */
     public function store(FileManagementRequest $request)
     {
-        $this->fileManagementService->create($request);
+        $file = $this
+            ->fileManagementService
+            ->create($request);
 
-        return redirect()->route('fileManagement.index')->with('message', 'File created successfully.');
+        return $file;
+
+        // return redirect()->route('fileManagement.index')->with('message', 'File created successfully.');
+        
     }
 
     /**
@@ -61,12 +71,15 @@ class FileManagementController extends Controller
      */
     public function show($id)
     {
-       $file = $this->fileManagementService->read($id);
+        $file = $this
+            ->fileManagementService
+            ->read($id);
 
-        if($file->isEmpty){
-        return ("File not found.");
+        if (!$file)
+        {
+            return ("File not found.");
         }
-         return view('fileManagement.show', compact('file'));
+        return view('fileManagement.show', compact('file'));
     }
 
     /**
@@ -75,9 +88,11 @@ class FileManagementController extends Controller
      * @param  \App\Models\FileManagement  $fileManagement
      * @return \Illuminate\Http\Response
      */
-    public function edit(FileManagement $fileManagement)
+    public function edit($id)
     {
-        $file = $this->fileManagementService->read($id);
+        $file = $this
+            ->fileManagementService
+            ->read($id);
 
         return view('fileManagement.edit', compact('file'));
     }
@@ -89,11 +104,14 @@ class FileManagementController extends Controller
      * @param  \App\Models\FileManagement  $fileManagement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FileManagement $fileManagement)
+    public function update(Request $request, $id)
     {
-        $file = $this->fileManagementService->update($request->all(), $id);
+        $file = $this
+            ->fileManagementService
+            ->update($request, $id);
 
-        return redirect()->route(fileManagement.index)->with('message', 'File has been updated succesfully');
+        return redirect()->route(fileManagement . index)
+            ->with('message', 'File has been updated succesfully');
     }
 
     /**
@@ -102,14 +120,19 @@ class FileManagementController extends Controller
      * @param  \App\Models\FileManagement  $fileManagement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FileManagement $fileManagement)
+    public function destroy($id)
     {
-        $file = $this->fileManagementService->read($id);
+        $file = $this
+            ->fileManagementService
+            ->read($id);
 
-        if(is_null($file)) {
-            return response()->json(["message" => "File was not found."]);   
+        if (is_null($file))
+        {
+            return response()->json(["message" => "File was not found."]);
         }
         $file->delete();
-		return redirect()->route('fileManagement.index')->with('message', 'File deleted successfully.');
+        return redirect()
+            ->route('fileManagement.index')
+            ->with('message', 'File deleted successfully.');
     }
 }

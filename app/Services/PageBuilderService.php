@@ -39,6 +39,6 @@ class PageBuilderService
 
 	public function delete($id)
 	{
-      return $this->pageBuilder->delete($id);
+      return $this->pageBuilder->deletePage($id);
 	}
 }
