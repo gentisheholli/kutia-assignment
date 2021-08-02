@@ -15,8 +15,6 @@ class CreatePageBuildersTable extends Migration
     {
         Schema::create('page_builders', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('page_id')->unsigned()->index();
-            // $table->foreign('page_id')->references('id')->on('page');
             $table->string('title');
             $table->text('content');
             $table->boolean('status');
